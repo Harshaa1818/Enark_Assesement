@@ -1,19 +1,20 @@
 
-import User from '../Models/user.models.js'
+import {User} from '../Models/user.models.js'
 
 
 const register=async(req,res)=>{
     try{
-        const {username, password,role}=req.body;
+        const { username, email, password, role }=req.body;
+        //console.log(username,email,password,role)
 
-        if(! username || ! password || !role){
+        if(!(username && email && password && role)){
             return res
             .status(404)
-            .json({message:"username, password and role is necessary"})
+            .json({message:"All fields are mandatory"})
         }
 
-        await User.create({username, password, role})
-        User.save();
+        await User.create({username, email, password, role})
+       
 
         return res
         .status(201)
@@ -31,18 +32,20 @@ const register=async(req,res)=>{
 const login=async(req,res)=>{
     try{
         const {username, password}=req.body;
+        console.log(username,password)
 
         if(! username || ! password ){
             return res.status(404).json({message:"username and password are necessary"})
         }
-
-        const user=await User.find({username})
+        
+        const user=await User.findOne({username})
+       
 
         if(!user){
                 return res.status(404).json({message:"user is not registered"})
         }
           
-        
+        console.log(user.password);
        if (! user.password===password){
         return res
         .status(402)
@@ -50,11 +53,12 @@ const login=async(req,res)=>{
 
        }
 
-       const AccessToken=await user.generateAccessToken();
+      const AccessToken=await user.generateAccessToken()
+      console.log(AccessToken);
 
        return res
        .status(200)
-       .cookies("AccessToken",AccessToken)
+      // .cookies("AccessToken",AccessToken)
        .json({message:"login successful"})
 
         
@@ -70,14 +74,13 @@ const logout=(req,res)=>{
     try{
         const userId=req._id
 
+        console.log(userId)
+
         if(!userId) return res.json({message:"user is invalid"})
 
         return res
         .status(200)
-        .clearcookies()
         .json({message:"user logged out sucessfully"})    
-
-
 
     }
     catch(err){

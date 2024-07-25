@@ -2,11 +2,11 @@ import { Router } from "express";
 import {verifyJwt} from '../auth.js'
 import {getTasks,addTask,updateTask,deleteTask} from '../Controllers/task.controllers.js'
 
-const router=Router();
+const taskRouter=Router();
 
-router.route('/').get(verifyJwt, getTasks);
-router.route('/addtask').post(verifyJwt,addTask)
-router.route('/updatetask').put(verifyJwt,updateTask)
-router.route('/deletetask').delete(verifyJwt,deleteTask)
+taskRouter.route('/').get(verifyJwt, getTasks);
+taskRouter.route('/addtask').post(verifyJwt,addTask)
+taskRouter.route('/updatetask').put(verifyJwt,updateTask)
+taskRouter.route('/deletetask').delete(verifyJwt,deleteTask)
 
-export {router}
+export {taskRouter}

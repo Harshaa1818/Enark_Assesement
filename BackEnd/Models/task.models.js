@@ -11,15 +11,18 @@ const taskSchema=new mongoose.Schema({
         type:String
     },
     status:{
-        type:Enum,
-        choices:["to-do","inprogress","done"]
+        type:String,
+        enum:["to-do","inprogress","done"]
     },
     priority:{
-        type:Enum,
-        choices:["low","medium","high"]
-    }
+        type:String,
+        enum:["low","medium","high"]
+    },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 
+   // userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 
 },{timestamps:true})
 
-export default Task=mongoose.model(taskSchema,'Task')
+export  const Task=mongoose.model('Task',taskSchema)
+export {taskSchema}

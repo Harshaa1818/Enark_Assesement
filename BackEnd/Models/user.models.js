@@ -1,28 +1,31 @@
 import mongoose from "mongoose";
 import jwt from 'jsonwebtoken'
+import {taskSchema} from './task.models.js'
 
-const userSchema=new mongoose.Schema({
-    username:{
-        required:true,
-        type:String,
-        unique:true
-
+const userSchema = new mongoose.Schema({
+    username: {
+        required: true,
+        type: String,
+        unique: true
     },
-    password:{
+    email:{
         required:true,
-        type:String,
-
+        unique:true,
+        type:String
     },
-    role:{
-        required:true,
-        type:Enum,
-        choices:['admin','user']
-
+    password: {
+        required: true,
+        type: String
     },
-    tasks:{
-       type: [Task]
-    }
-},{timestamps:true})
+    role: {
+        required: true,
+        type: String,
+        enum: ['admin', 'user']
+    },
+    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }]
+    
+  
+}, { timestamps: true });
 
 userSchema.methods.generateAccessToken=function(){
     return jwt.sign(
@@ -32,10 +35,12 @@ userSchema.methods.generateAccessToken=function(){
             password:this.password
         },
         process.env.SECRET_KEY,
-        process.env.EXPIRY_PERIOD
+        {
+            expiresIn: process.env.EXPIRY_PERIOD
+        }
 
     )
 
 }
 
-export default User=mongoose.model(userSchema,'User')
+export const User=mongoose.model('User', userSchema)
