@@ -6,10 +6,10 @@ import {adminLogin,getAllTasks,updateTask,deleteTask,addTask} from '../Controlle
 const adminRouter=Router()
 
 adminRouter.route('/login').get(adminLogin)
-adminRouter.route('/getalltasks/:userid').get(verifyJwt,getAllTasks)
-adminRouter.route('updatetask/:userid').put(verifyJwt,updateTask)
-adminRouter.route('deletetask/:userid').delete(verifyJwt,deleteTask)
-adminRouter.route('addtask/:userid').post(verifyJwt,addTask)
+adminRouter.route('/getalltasks/').get(verifyJwt,getAllTasks)
+adminRouter.route('updatetask/').put(verifyJwt,updateTask)
+adminRouter.route('deletetask/').delete(verifyJwt,deleteTask)
+adminRouter.route('addtask/').post(verifyJwt,addTask)
 
 export {adminRouter}
 
