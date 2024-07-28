@@ -1,141 +1,98 @@
 import { Task } from "../Models/task.models.js";
-import {User} from "../Models/user.models.js"
+import { User } from "../Models/user.models.js";
 
-const getTasks=async(req,res)=>{
-    try{
-        const userId=req._id;
-        const user=await User.findById(userId)
-        const tasks=await Task.find({userId})
-        if(!tasks){
-            return res.status(404).json({message:"no tasks found"})
-        }
-        return res.status(200).json({tasks})
+const getTasks = async (req, res) => {
+  try {
+    const userId = req._id;
+    const user = await User.findById(userId);
+    const tasks = await Task.find({ userId });
+    if (!tasks) {
+      return res.status(404).json({ message: "No tasks found" });
     }
-    catch(err){
-        return res.status(500).json({message:"server returned an error"})
-    }
-}
+    return res.status(200).json({ tasks });
+  } catch (err) {
+    return res.status(500).json({ message: "Server returned an error" });
+  }
+};
 
+const addTask = async (req, res) => {
+  try {
+    console.log('reach');
+    const userId = req._id;
+    const user = await User.findById(userId);
 
-const addTask=async(req,res)=>{
-    
-    try{
-        console.log('reach')
-        const userId=req._id;
-        
-        
-        const user=await User.findById(userId)
-        
+    const { taskName, description, status, priority } = req.body;
+    console.log(taskName, description, status, priority);
 
-      
-        const {taskName,description,status,priority}=req.body;
+    const existingTask = await Task.findOne({ taskName });
 
-        const existingTask=await Task.findOne({taskName})
-
-        if(existingTask){
-            return res.status(400).json({message:"task already exists"})
-        }
-
-        
-        
-
-        if(!(taskName && description && status && priority)){
-            return res.status(400).json({message:"task is required"})
-        }
-
-       const task= await Task.create({taskName,description,status,priority, userId})
-        
-       task.save()
-
-        await User.findByIdAndUpdate(userId, { $push: { tasks: task._id } });
-
-       
-
-        //  user.tasks.push(task)
-        //     await user.save()
-        //     console.log(user);
-       
-
-        return res.status(200).json({message:"task added successfully"})
+    if (existingTask) {
+      return res.status(400).json({ message: "Task already exists" });
     }
 
-    catch(err){
-        return res.status(500).json({message:"server returned an error",err})
+    if (!(taskName && description && status && priority)) {
+      return res.status(400).json({ message: "All task fields are required" });
     }
-}
-const updateTask=async(req,res)=>{
-    try{
-      
-        const {taskName,description,status,priority}=req.body
 
-        if(!(taskName && description && status && priority)){
-            return res.status(400).json({message:"update all the information"})
-        }
+    const task = await Task.create({ taskName, description, status, priority, userId });
+    await task.save();
 
-        const task=await Task.findOne({taskName})
-        
+    await User.findByIdAndUpdate(userId, { $push: { tasks: task._id } });
 
-        if(!task){
-            return res.status(404).json({message:"task not found"})
-        }
+    return res.status(200).json({ message: "Task added successfully", task });
+  } catch (err) {
+    return res.status(500).json({ message: "Server returned an error", err });
+  }
+};
 
-        
-       
-
-         await Task.findByIdAndUpdate(task._id,{ 
-            taskName:taskName,
-            description:description,
-            status:status,
-            priority:priority
-        })
-    
-        
-
-        console.log(task)
-
-
-        
-
-        return res.status(200).json({message:"task updated successfully"})
+const updateTask = async (req, res) => {
+    try {
+      const taskId = req.params.id;
+      const { taskName, description, status, priority } = req.body;
+  
+      if (!(taskName && description && status && priority)) {
+        return res.status(400).json({ message: "Update all the information" });
+      }
+  
+      const task = await Task.findById(taskId);
+  
+      if (!task) {
+        return res.status(404).json({ message: "Task not found" });
+      }
+  
+      task.taskName = taskName;
+      task.description = description;
+      task.status = status;
+      task.priority = priority;
+  
+      await task.save();
+  
+      return res.status(200).json({ message: "Task updated successfully", task });
+    } catch (err) {
+      return res.status(500).json({ message: "Server returned an error", err });
     }
-    catch(err){
-        return res.status(500).json({message:"server returned an error",err})
+  };
+  
+
+  const deleteTask = async (req, res) => {
+    try {
+      const taskId = req.params.id;
+      const userId = req._id;
+  
+      const task = await Task.findById(taskId);
+      if (!task) {
+        return res.status(404).json({ message: "Task not found" });
+      }
+  
+      await Task.findByIdAndDelete(taskId);
+  
+      await User.findByIdAndUpdate(userId, { $pull: { tasks: taskId } });
+  
+      return res.status(200).json({ message: "Task deleted successfully" });
+    } catch (err) {
+      return res.status(500).json({ message: "Server returned an error" });
     }
-}
-const deleteTask=async(req,res)=>{
-    try{
-        const userId=req._id;
-        const user=await User.findById(userId)
-        const {taskName}=req.body
+  };
+  
 
-        if(!taskName){
-            return res.status(400).json({message:"task id is required"})
-        }
-
-        const task=await Task.find({taskName})
-        await Task.findByIdAndDelete(task._id)
-        
-        
-
-        if(!task){
-            return res.status(404).json({message:"task not found"})
-        }
-
-        user.tasks.map((tak)=>{
-            if(tak._id==task._id){
-                user.tasks.splice(user.tasks.indexOf(tak),1)
-            }
-        })
-        user.save()
-        
-
-        return res.status(200).json({message:"task deleted successfully"})
-
-    }
-    catch(err){
-        return res.status(500).json({message:"server returned an error"})
-    }
-}
-
-
-export  { getTasks , addTask , updateTask , deleteTask }
+export { getTasks, addTask, updateTask, deleteTask };

@@ -1,64 +1,73 @@
-
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import React, { useState } from 'react';
-import "../App.css"
+import { Form, Input, Button, Typography, Row, Col, Card } from 'antd';
 import axios from 'axios';
-import UserLandingPage from './UserLandingPage.jsx';
 
-const LoginPage = () =>{
+const { Title } = Typography;
 
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    
-    const[isUserloggedin,setisUserloggedin]=useState(false)
+const LoginPage = () => {
+  const [form] = Form.useForm();
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
-    const handleSubmit = () =>{
+  const handleSubmit = (values) => {
+    axios.post('http://localhost:8000/api/v1/user/login', values)
+      .then((res) => {
+        alert('Login Successful');
+        const token = res.data.AccessToken;
+        document.cookie = `token=${token}`;
+        localStorage.setItem('isloggedin', true);
+        setIsUserLoggedIn(true);
+        window.location.href = '/UserLandingPage';
+      })
+      .catch((err) => {
+        alert(err.response.data.message);
+      });
+  };
 
-        if(username === '' || password === '') return alert('Please fill in all fields')
+  return (
+    <Row justify="center" align="middle" style={{ height: '100vh' }} className='bg-slate-200'>
+      <Col span={8}>
+        <Card style={{ boxShadow: '0 4px 8px rgba(0,0,0,0.2)', borderRadius: '10px' }}>
+          <Title level={2} style={{ textAlign: 'center' }}>Login</Title>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleSubmit}
+          >
+            <Form.Item
+              label="Username"
+              name="username"
+              rules={[{ required: true, message: 'Please input your username!' }]}
+            >
+              <Input placeholder="Enter your username" />
+            </Form.Item>
 
-        axios.post('http://localhost:8000/api/v1/user/login', {
-            username,
-            password
-        })
-        .then((res)=>{
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: 'Please input your password!' }]}
+            >
+              <Input.Password placeholder="Enter your password" />
+            </Form.Item>
 
-            
+            <Form.Item>
+              <Button type="primary" htmlType="submit" block>
+                Login
+              </Button>
+            </Form.Item>
 
-            alert('Login Successful')
-            const token=res.data.AccessToken
-            //console.log(token)
-            document.cookie=`token=${token}`
-           localStorage.setItem('isloggedin',true)
-            setisUserloggedin(true)
-            window.location.href='/UserLandingPage'
-            
-            
-        })
-        .catch((err)=>{
-            alert(err.response.data.message)
-            
-        })
+            <Form.Item>
+              <NavLink to='/register'>
+                <Button type="default" block>
+                  Register
+                </Button>
+              </NavLink>
+            </Form.Item>
+          </Form>
+        </Card>
+      </Col>
+    </Row>
+  );
+};
 
-       
-    }
-
-
-    return(
-        <div>
-            
-            
-            <h1>Login Page</h1>
-            <div className='input-field-container'>
-            <input type="text" placeholder="Enter your username" onChange={(e)=>setUsername(e.target.value)}/>
-            <input type="password" placeholder="Enter your password" onChange={(e)=>setPassword(e.target.value)}/>
-            <div className='buttons'>
-            <button  onClick={handleSubmit}>Login</button>
-            <NavLink to='/register'><button  className='registerButton'>Register</button></NavLink>
-            </div>
-            </div>
-            
-        </div>
-    )
-
-}
-export default LoginPage
+export default LoginPage;

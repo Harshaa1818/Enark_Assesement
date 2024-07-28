@@ -1,34 +1,74 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
+import React, { useEffect, useState } from 'react';
+import { Layout, Menu, Button } from 'antd';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
+const { Header } = Layout;
 
 export default function ButtonAppBar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const loggedIn = localStorage.getItem('isloggedin');
+    if (loggedIn) {
+      setIsLoggedIn(true);
+      const token = document.cookie.split('=')[1];
+      axios.get('http://localhost:8000/api/v1/user/profile', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          setUsername(response.data.username);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, []);
+
+  const handleLogout = () => {
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    localStorage.removeItem('isloggedin');
+    setIsLoggedIn(false);
+    setUsername('');
+    window.location.href = '/login';
+  };
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
-          </Typography>
-         <NavLink to='/login'><Button color='inherit'>Login</Button></NavLink> 
-        <NavLink to='/register'><Button color="inherit">Register</Button></NavLink>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <Layout>
+      <Header>
+        <div className="logo" />
+        <Menu theme="dark" mode="horizontal">
+          <Menu.Item key="home">
+            <NavLink to="/" className='text-xl font-bold'>Home</NavLink>
+          </Menu.Item>
+          <div style={{ marginLeft: 'auto' }}>
+            {isLoggedIn ? (
+              <>
+                <span style={{ color: 'white', marginRight: '20px' }}>
+                  {username}
+                </span>
+                <Button type="primary" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <NavLink to="/login">
+                  <Button type="default" style={{ marginRight: '10px' }}>
+                    Login
+                  </Button>
+                </NavLink>
+                <NavLink to="/register">
+                  <Button type="primary">Register</Button>
+                </NavLink>
+              </>
+            )}
+          </div>
+        </Menu>
+      </Header>
+    </Layout>
   );
 }
