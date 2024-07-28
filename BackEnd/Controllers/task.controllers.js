@@ -15,13 +15,29 @@ const getTasks=async(req,res)=>{
         return res.status(500).json({message:"server returned an error"})
     }
 }
+
+
 const addTask=async(req,res)=>{
+    
     try{
+        console.log('reach')
         const userId=req._id;
+        
+        
         const user=await User.findById(userId)
+        
+
+      
+        const {taskName,description,status,priority}=req.body;
+
+        const existingTask=await Task.findOne({taskName})
+
+        if(existingTask){
+            return res.status(400).json({message:"task already exists"})
+        }
 
         
-        const {taskName,description,status,priority}=req.body
+        
 
         if(!(taskName && description && status && priority)){
             return res.status(400).json({message:"task is required"})
@@ -29,7 +45,7 @@ const addTask=async(req,res)=>{
 
        const task= await Task.create({taskName,description,status,priority, userId})
         
-        await task.save()
+       task.save()
 
         await User.findByIdAndUpdate(userId, { $push: { tasks: task._id } });
 
@@ -42,6 +58,7 @@ const addTask=async(req,res)=>{
 
         return res.status(200).json({message:"task added successfully"})
     }
+
     catch(err){
         return res.status(500).json({message:"server returned an error",err})
     }
@@ -121,4 +138,4 @@ const deleteTask=async(req,res)=>{
 }
 
 
-export {getTasks,addTask,updateTask,deleteTask}
+export  { getTasks , addTask , updateTask , deleteTask }

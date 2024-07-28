@@ -1,19 +1,31 @@
 
 import {User} from '../Models/user.models.js'
+import cookieParser from 'cookie-parser'
 
 
 const register=async(req,res)=>{
     try{
-        const { username, email, password, role }=req.body;
-        //console.log(username,email,password,role)
+        const { username, email, password}=req.body;
+        console.log(username,email,password)
 
-        if(!(username && email && password && role)){
+
+        if(!(username && email && password)){
             return res
             .status(404)
             .json({message:"All fields are mandatory"})
         }
 
-        await User.create({username, email, password, role})
+        const existingUser=await User.find({username})
+
+        console.log(existingUser)
+
+        if(existingUser.length>0){
+            return res
+            .status(409)
+            .json({message:"User already exists"})
+        }
+
+        await User.create({username, email, password, role:"user"})
        
 
         return res
@@ -46,7 +58,7 @@ const login=async(req,res)=>{
         }
           
         console.log(user.password);
-       if (! user.password===password){
+       if ( user.password!==password){
         return res
         .status(402)
         .json({message:"password is not correct"})
@@ -58,8 +70,8 @@ const login=async(req,res)=>{
 
        return res
        .status(200)
-      // .cookies("AccessToken",AccessToken)
-       .json({message:"login successful"})
+      //.cookie("AccessToken",AccessToken)
+       .json({message:"login successful",AccessToken})
 
         
 

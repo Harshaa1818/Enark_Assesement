@@ -1,7 +1,12 @@
 
+import { Route, Routes } from 'react-router-dom'
 import './App.css'
+import LoginPage from './components/Login.jsx'
+import Register from './components/Register.jsx'
+import ButtonAppBar from './components/Navbar.jsx'
+import UserLandingPage from './components/UserLandingPage.jsx'
+import Temp from './components/Temp.jsx'
 
-import BasicSimpleTreeView from './Comp.jsx'
 
 
 function App() {
@@ -9,8 +14,16 @@ function App() {
 
   return (
     <>
-     <div>Swagat nahi karoge hamara!!!</div>
-     <BasicSimpleTreeView/>
+   
+    <Routes>
+      <Route path='/' element={<ButtonAppBar/>} />
+     <Route path='/login' element={<LoginPage/>} />
+     <Route path='/register' element={<Register/>} />
+     <Route path='/UserLandingPage' element={<UserLandingPage/>} />
+     <Route path='/temp' element={<Temp/>} />
+
+     </Routes>
+     
 
     </>
   )
