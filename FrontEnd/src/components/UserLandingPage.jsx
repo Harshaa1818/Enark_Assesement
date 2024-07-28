@@ -78,7 +78,8 @@ export default function UserLandingPage() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [form] = Form.useForm();
-
+ const isAdmin = localStorage.getItem('isAdmin');
+  const url = isAdmin ? "http://localhost:8000/api/v1/admin/getalltasks" :'http://localhost:8000/api/v1/task/';
   useEffect(() => {
     const token = document.cookie.split('=')[1];
     if (!token) {
@@ -87,13 +88,14 @@ export default function UserLandingPage() {
       return;
     }
 
-    axios.get('http://localhost:8000/api/v1/task/', {
+    axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
-        setTasks(response.data.tasks);
+        setTasks(isAdmin ? response.data.task : response.data.tasks)
+        console.log(response.data.tasks);
       })
       .catch((error) => {
         console.log(error);
@@ -179,10 +181,11 @@ export default function UserLandingPage() {
       return <p className="text-gray-500">No tasks available</p>;
     }
 
-    return tasks.map((task, index) => (
-      <div key={task._id} className="mb-4">
+    return tasks.map((task) => (
+      <div key={task._id} className="mb-4 flex justify-center">
         <Card
           title={task.taskName.toUpperCase()}
+          id={task?.userId}
           className="p-4 rounded-lg shadow-lg bg-white"
           style={{ width: 300 }}
         >
@@ -197,6 +200,7 @@ export default function UserLandingPage() {
             <Button type="link" icon={<EditOutlined />} onClick={() => showModal(task)} style={{ border: '1px solid #1890ff', borderRadius: '4px' }}>Edit</Button>
             <Button type="link" icon={<DeleteOutlined />} danger onClick={() => deleteTask(task._id)} style={{ border: '1px solid red', borderRadius: '4px' }}>Delete</Button>
           </div>
+          <p>{}</p>
         </Card>
       </div>
     ));
@@ -230,9 +234,11 @@ export default function UserLandingPage() {
 
         <div className="flex flex-wrap justify-center gap-4">
           {['high', 'medium', 'low'].map((priority) => (
-            <div key={priority} className={`p-4 mb-4 ${priority === 'high' ? 'bg-red-50' : priority === 'medium' ? 'bg-yellow-50' : 'bg-green-50'} rounded-lg shadow-md`} style={{ width: '100%' }}>
-              <h2 className="text-xl font-semibold mb-4 capitalize">{priority} Priority</h2>
-              {renderTasks(groupedTasks[priority] || [])}
+            <div key={priority} className={`p-4 mb-4 ${priority === 'high' ? 'bg-red-50' : priority === 'medium' ? 'bg-yellow-50' : 'bg-green-50'} rounded-lg shadow-md w-full`}>
+              <h2 className="text-xl font-semibold mb-4 capitalize text-center">{priority} Priority</h2>
+              <div className="flex flex-wrap justify-center gap-4">
+                {renderTasks(groupedTasks[priority] || [])}
+              </div>
             </div>
           ))}
         </div>

@@ -34,6 +34,7 @@ export default function ButtonAppBar() {
     setIsLoggedIn(false);
     setUsername('');
     window.location.href = '/login';
+    localStorage.removeItem('isAdmin');
   };
 
   return (

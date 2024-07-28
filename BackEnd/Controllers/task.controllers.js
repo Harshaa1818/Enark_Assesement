@@ -17,13 +17,12 @@ const getTasks = async (req, res) => {
 
 const addTask = async (req, res) => {
   try {
-    console.log('reach');
+
     const userId = req._id;
     const user = await User.findById(userId);
 
     const { taskName, description, status, priority } = req.body;
-    console.log(taskName, description, status, priority);
-
+   
     const existingTask = await Task.findOne({ taskName });
 
     if (existingTask) {
@@ -33,8 +32,9 @@ const addTask = async (req, res) => {
     if (!(taskName && description && status && priority)) {
       return res.status(400).json({ message: "All task fields are required" });
     }
+    const username=user.username;
 
-    const task = await Task.create({ taskName, description, status, priority, userId });
+    const task = await Task.create({ taskName, description, status, priority, userId, username });
     await task.save();
 
     await User.findByIdAndUpdate(userId, { $push: { tasks: task._id } });

@@ -16,6 +16,7 @@ const LoginPage = () => {
         const token = res.data.AccessToken;
         document.cookie = `token=${token}`;
         localStorage.setItem('isloggedin', true);
+        localStorage.setItem('isAdmin', res.data.role === 'user' ? false : true);
         setIsUserLoggedIn(true);
         window.location.href = '/UserLandingPage';
       })

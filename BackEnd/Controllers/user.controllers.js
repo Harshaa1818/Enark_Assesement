@@ -57,21 +57,21 @@ const login=async(req,res)=>{
                 return res.status(404).json({message:"user is not registered"})
         }
           
-        console.log(user.password);
+
        if ( user.password!==password){
         return res
         .status(402)
         .json({message:"password is not correct"})
 
        }
-
+        const role = user.role
       const AccessToken=await user.generateAccessToken()
       console.log(AccessToken);
 
        return res
        .status(200)
       //.cookie("AccessToken",AccessToken)
-       .json({message:"login successful",AccessToken})
+       .json({message:"login successful",AccessToken,role})
 
         
 

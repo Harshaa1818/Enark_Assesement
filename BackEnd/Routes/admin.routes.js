@@ -6,7 +6,7 @@ import {adminLogin,getAllTasks,updateTask,deleteTask,addTask} from '../Controlle
 const adminRouter=Router()
 
 adminRouter.route('/login').get(adminLogin)
-adminRouter.route('/getalltasks/').get(verifyJwt,getAllTasks)
+adminRouter.route('/getalltasks').get(verifyJwt,getAllTasks)
 adminRouter.route('updatetask/').put(verifyJwt,updateTask)
 adminRouter.route('deletetask/').delete(verifyJwt,deleteTask)
 adminRouter.route('addtask/').post(verifyJwt,addTask)

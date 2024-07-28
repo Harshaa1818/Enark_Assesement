@@ -29,7 +29,7 @@ const getAllTasks=async(req,res)=>{
             return res.status(404).json({message:"no tasks found"})
         }
 
-        return res.status(200).json({message:"all tasks",task})
+        return res.status(200).json({ task })
 
     }
     catch(err){
