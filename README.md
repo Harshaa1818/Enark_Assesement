@@ -1,0 +1,15 @@
+API's
+Admin: (Tasks)
+to get all tasks of all users: GET (http://localhost:8000/api/v1/admin/getalltasks)
+to add new task: POST (http://localhost:8000/api/v1/admin/addtask)
+to update existing task: PUT (http://localhost:8000/api/v1/admin/updatetask)
+to delete existing task: DELETE (http://localhost:8000/api/v1/admin/deletetask)
+User: (Tasks)
+to add new task: POST (http://localhost:8000/api/v1/user/addtask)
+to update existing task: PUT (http://localhost:8000/api/v1/user/updatetask)
+to delete existing task: DELETE (http://localhost:8000/api/v1/user/deletetask)
+
+(Login/register User)
+to add new user POST(http://localhost:8000/api/v1/user/register)
+to login for the user POST(http://localhost:8000/api/v1/user/login)
+to logout a user POST(http://localhost:8000/api/v1/user/logout)
