@@ -15,11 +15,4 @@ catch (err) {
     console.log("Server error",err);
 }
 
-const express = require('express');
-const app = express();
 
-app.get('/api/hello', (req, res) => {
-  res.status(200).json({ message: 'Hello from Express!' });
-});
-
-module.exports = app;
