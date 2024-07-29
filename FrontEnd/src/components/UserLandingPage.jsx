@@ -79,7 +79,12 @@ export default function UserLandingPage() {
   const [editingTask, setEditingTask] = useState(null);
   const [form] = Form.useForm();
  const isAdmin = localStorage.getItem('isAdmin');
-  const url = isAdmin ? "http://localhost:8000/api/v1/admin/getalltasks" :'http://localhost:8000/api/v1/task/';
+  let url = 'http://localhost:8000/api/v1/task/';
+  if (isAdmin === 'true') {
+    url = 'http://localhost:8000/api/v1/admin/getalltasks';
+  }
+
+  const token = document.cookie.split('=')[1];
   useEffect(() => {
     const token = document.cookie.split('=')[1];
     if (!token) {
@@ -94,14 +99,16 @@ export default function UserLandingPage() {
       },
     })
       .then((response) => {
-        setTasks(isAdmin ? response.data.task : response.data.tasks)
-        console.log(response.data.tasks);
+        response.data.tasks?setTasks(response.data.tasks):setTasks(response.data.task);
+        console.log(response.data.task);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [token]);
 
+
+console.log(tasks)
   useEffect(() => {
     if (open && editingTask) {
       form.setFieldsValue(editingTask);
@@ -171,8 +178,8 @@ export default function UserLandingPage() {
       });
   };
 
-  const groupedTasks = tasks.reduce((acc, task) => {
-    (acc[task.priority] = acc[task.priority] || []).push(task);
+  const groupedTasks = tasks.reduce((acc, tas) => {
+    (acc[tas.priority] = acc[tas.priority] || []).push(tas);
     return acc;
   }, {});
 
@@ -182,27 +189,27 @@ export default function UserLandingPage() {
     }
 
     return tasks.map((task) => (
-      <div key={task._id} className="mb-4 flex justify-center">
-        <Card
-          title={task.taskName.toUpperCase()}
-          id={task?.userId}
-          className="p-4 rounded-lg shadow-lg bg-white"
-          style={{ width: 300 }}
-        >
-          <p className="text-gray-700">{task.description}</p>
-          <div className="mt-4 flex justify-between items-center">
-            <span className={task.priority === 'high' ? "bg-red-500 text-white rounded-full px-3 py-1 text-xs font-semibold" : task.priority === 'low' ? "bg-green-400 text-white rounded-full px-3 py-1 text-xs font-semibold" : 'bg-yellow-400 text-white rounded-full px-3 py-1 text-xs font-semibold'}>
-              {task.priority}
-            </span>
-            <span className="text-gray-500 text-xs">{task.status}</span>
-          </div>
-          <div className="mt-4 flex justify-end space-x-2">
-            <Button type="link" icon={<EditOutlined />} onClick={() => showModal(task)} style={{ border: '1px solid #1890ff', borderRadius: '4px' }}>Edit</Button>
-            <Button type="link" icon={<DeleteOutlined />} danger onClick={() => deleteTask(task._id)} style={{ border: '1px solid red', borderRadius: '4px' }}>Delete</Button>
-          </div>
-          <p>{}</p>
-        </Card>
-      </div>
+        <div key={task._id} className="mb-4 flex justify-center">
+            <Card
+                title={task.taskName.toUpperCase()}
+                id={task?.userId}
+                className="p-4 rounded-lg shadow-lg bg-white"
+                style={{ width: 300 }}
+            >
+                <p className="text-gray-700">{task.description}</p>
+                <div className="mt-4 flex justify-between items-center">
+                    <span className={task.priority === 'high' ? "bg-red-500 text-white rounded-full px-3 py-1 text-xs font-semibold" : task.priority === 'low' ? "bg-green-400 text-white rounded-full px-3 py-1 text-xs font-semibold" : 'bg-yellow-400 text-white rounded-full px-3 py-1 text-xs font-semibold'}>
+                        {task.priority}
+                    </span>
+                    <span className="text-gray-500 text-xs">{task.status}</span>
+                </div>
+                <div className="mt-4 flex justify-end space-x-2">
+                    <Button type="link" icon={<EditOutlined />} onClick={() => showModal(task)} style={{ border: '1px solid #1890ff', borderRadius: '4px' }}>Edit</Button>
+                    <Button type="link" icon={<DeleteOutlined />} danger onClick={() => deleteTask(task._id)} style={{ border: '1px solid red', borderRadius: '4px' }}>Delete</Button>
+                </div>
+                <p>{}</p>
+            </Card>
+        </div>
     ));
   };
 
