@@ -3,7 +3,7 @@ import { Button, Card, Modal, Form, Input, Select } from 'antd';
 import { FileAddOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import ButtonAppBar from './Navbar.jsx';
 import axios from 'axios';
-
+import { url } from '../../constants/index.js';
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -79,9 +79,9 @@ export default function UserLandingPage() {
   const [editingTask, setEditingTask] = useState(null);
   const [form] = Form.useForm();
  const isAdmin = localStorage.getItem('isAdmin');
-  let url = 'http://localhost:8000/api/v1/task/';
+  let uri = 'http://http://13.53.125.58:8000/api/v1/task/';
   if (isAdmin === 'true') {
-    url = 'http://localhost:8000/api/v1/admin/getalltasks';
+    uri = url + 'api/v1/admin/getalltasks';
   }
 
   const token = document.cookie.split('=')[1];
@@ -93,7 +93,7 @@ export default function UserLandingPage() {
       return;
     }
 
-    axios.get(url, {
+    axios.get(uri, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -127,7 +127,7 @@ console.log(tasks)
     setConfirmLoading(true);
 
     if (editingTask) {
-      axios.put(`http://localhost:8000/api/v1/task/updatetask/${editingTask._id}`, values, {
+      axios.put(`${url}api/v1/task/updatetask/${editingTask._id}`, values, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -142,7 +142,7 @@ console.log(tasks)
           setConfirmLoading(false);
         });
     } else {
-      axios.post('http://localhost:8000/api/v1/task/addtask', values, {
+      axios.post(url + 'api/v1/task/addtask', values, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -165,7 +165,7 @@ console.log(tasks)
 
   const deleteTask = (taskId) => {
     const token = document.cookie.split('=')[1];
-    axios.delete(`http://localhost:8000/api/v1/task/deletetask/${taskId}`, {
+    axios.delete(`${url}api/v1/task/deletetask/${taskId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Layout, Menu, Button } from 'antd';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
+import { url } from '../../constants';
+
 
 const { Header } = Layout;
 
@@ -14,7 +16,7 @@ export default function ButtonAppBar() {
     if (loggedIn) {
       setIsLoggedIn(true);
       const token = document.cookie.split('=')[1];
-      axios.get('http://localhost:8000/api/v1/user/profile', {
+      axios.get(url + 'api/v1/user/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -2,15 +2,17 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Form, Input, Button, Typography, Row, Col, Card } from 'antd';
 import axios from 'axios';
+import { url } from '../../constants';
 
 const { Title } = Typography;
+
 
 const LoginPage = () => {
   const [form] = Form.useForm();
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   const handleSubmit = (values) => {
-    axios.post('http://localhost:8000/api/v1/user/login', values)
+    axios.post(url + 'api/v1/user/login', values)
       .then((res) => {
         alert('Login Successful');
         const token = res.data.AccessToken;

@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Form, Input, Button, Typography, Row, Col, Card } from "antd";
 import axios from "axios";
-
+import { url } from "../../constants";
 const { Title } = Typography;
 
 const Register = () => {
   const [form] = Form.useForm();
 
   const handleRegister = (values) => {
-    axios.post('http://localhost:8000/api/v1/user/register', values)
+    axios.post(url + 'api/v1/user/register', values)
       .then((res) => {
         alert('Registration Successful');
         window.location.href = '/login';
