@@ -3,7 +3,7 @@ import { Button, Card, Modal, Form, Input, Select } from 'antd';
 import { FileAddOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import ButtonAppBar from './Navbar.jsx';
 import axios from 'axios';
-import { url } from '../../constants/index.js';
+import { url } from '../constants/index.js';
 const { TextArea } = Input;
 const { Option } = Select;
 

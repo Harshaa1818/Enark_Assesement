@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Form, Input, Button, Typography, Row, Col, Card } from 'antd';
 import axios from 'axios';
-import { url } from '../../constants';
+import { url } from '../constants';
 
 const { Title } = Typography;
 

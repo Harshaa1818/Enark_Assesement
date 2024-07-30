@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Layout, Menu, Button } from 'antd';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
-import { url } from '../../constants';
+import { url } from '../constants';
 
 
 const { Header } = Layout;
