@@ -79,7 +79,7 @@ export default function UserLandingPage() {
   const [editingTask, setEditingTask] = useState(null);
   const [form] = Form.useForm();
  const isAdmin = localStorage.getItem('isAdmin');
-  let uri = 'http://http://13.53.125.58:8000/api/v1/task/';
+  let uri = 'https://vercel-henna-five-40.vercel.app/';
   if (isAdmin === 'true') {
     uri = url + 'api/v1/admin/getalltasks';
   }
