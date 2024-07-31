@@ -12,7 +12,7 @@ const LoginPage = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   const handleSubmit = (values) => {
-    axios.post(url + 'api/v1/user/login', values)
+    axios.post('https://enark.vercel.app/api/v1/user/login', values)
       .then((res) => {
         alert('Login Successful');
         const token = res.data.AccessToken;
