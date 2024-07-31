@@ -8,10 +8,11 @@ dotenv.config({ path: './.env' });
 
 const app = express();
 
-// Middleware setup
 app.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true
+    origin: ['http://localhost:3000', 'https://enark-assesement-gjox.vercel.app',"https://vercel-henna-five-40.vercel.app",'*'],
+    credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Authorization, X-Requested-With'
 }));
 
 app.use(express.json({ limit: '16kb' }));
