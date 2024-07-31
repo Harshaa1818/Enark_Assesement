@@ -16,17 +16,7 @@ export default function ButtonAppBar() {
     if (loggedIn) {
       setIsLoggedIn(true);
       const token = document.cookie.split('=')[1];
-      axios.get(url + 'api/v1/user/profile', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((response) => {
-          setUsername(response.data.username);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    
     }
   }, []);
 
