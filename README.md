@@ -1,3 +1,5 @@
+Deployement Link: https://frontend.webfuze.in/
+
 Functionalities for User:
 1. User can create a new task and assign priority and status for it
 2. User can see all tasks of themselves after logging in
