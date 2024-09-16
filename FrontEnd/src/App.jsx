@@ -6,6 +6,7 @@ import Register from './components/Register.jsx'
 import ButtonAppBar from './components/Navbar.jsx'
 import UserLandingPage from './components/UserLandingPage.jsx'
 import Temp from './components/Temp.jsx'
+import { HomePage } from './components/HomePage.jsx'
 
 
 
@@ -16,7 +17,7 @@ function App() {
     <>
    
     <Routes>
-      <Route path='/' element={<ButtonAppBar/>} />
+      <Route path='/' element={<><ButtonAppBar/><HomePage/></>} />
      <Route path='/login' element={<LoginPage/>} />
      <Route path='/register' element={<Register/>} />
      <Route path='/UserLandingPage' element={<UserLandingPage/>} />
