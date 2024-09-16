@@ -1,15 +1,12 @@
-API's
-Admin: (Tasks)
-to get all tasks of all users: GET (http://localhost:8000/api/v1/admin/getalltasks)
-to add new task: POST (http://localhost:8000/api/v1/admin/addtask)
-to update existing task: PUT (http://localhost:8000/api/v1/admin/updatetask)
-to delete existing task: DELETE (http://localhost:8000/api/v1/admin/deletetask)
-User: (Tasks)
-to add new task: POST (http://localhost:8000/api/v1/user/addtask)
-to update existing task: PUT (http://localhost:8000/api/v1/user/updatetask)
-to delete existing task: DELETE (http://localhost:8000/api/v1/user/deletetask)
+Functionalities for User:
+1. User can create a new task and assign priority and status for it
+2. User can see all tasks of themselves after logging in
+3. User can update/ delete exisiting task
 
-(Login/register User)
-to add new user POST(http://localhost:8000/api/v1/user/register)
-to login for the user POST(http://localhost:8000/api/v1/user/login)
-to logout a user POST(http://localhost:8000/api/v1/user/logout)
+FUnctionalities for Admin:
+1. Admin can view all users task.
+2. Admin can add/update/delete exisitng task
+
+After registering a new user they will be treated as "User",
+Admin credentials: username: admin, password: admin
+    
