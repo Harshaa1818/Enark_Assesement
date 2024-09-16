@@ -20,10 +20,12 @@ const addTask = async (req, res) => {
 
     const userId = req._id;
     const user = await User.findById(userId);
+    console.log(user);
 
     const { taskName, description, status, priority } = req.body;
-   
+     console.log(taskName);
     const existingTask = await Task.findOne({ taskName });
+     console.log(existingTask);
 
     if (existingTask) {
       return res.status(400).json({ message: "Task already exists" });
