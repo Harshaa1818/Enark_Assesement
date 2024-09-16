@@ -4,6 +4,7 @@ import { Form, Input, Button, Typography, Row, Col, Card } from 'antd';
 import axios from 'axios';
 import { url } from '../constants';
 
+
 const { Title } = Typography;
 
 
@@ -12,7 +13,7 @@ const LoginPage = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   const handleSubmit = (values) => {
-    axios.post('https://enark.vercel.app/api/v1/user/login', values)
+   axios.post(url+"/user/login", values)
       .then((res) => {
         alert('Login Successful');
         const token = res.data.AccessToken;

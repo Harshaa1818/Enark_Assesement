@@ -8,7 +8,7 @@ const Register = () => {
   const [form] = Form.useForm();
 
   const handleRegister = (values) => {
-    axios.post(url + 'api/v1/user/register', values)
+    axios.post(url+'/user/register', values)
       .then((res) => {
         alert('Registration Successful');
         window.location.href = '/login';

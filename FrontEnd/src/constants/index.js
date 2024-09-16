@@ -1,4 +1,4 @@
 
 
-export const url = 'https://enark.vercel.app/'
+export const url = 'https://api.webfuze.in/api/v1'
 

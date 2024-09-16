@@ -79,9 +79,9 @@ export default function UserLandingPage() {
   const [editingTask, setEditingTask] = useState(null);
   const [form] = Form.useForm();
  const isAdmin = localStorage.getItem('isAdmin');
-  let uri = 'https://enark.vercel.app/api/v1/task/';
+  let uri = 'https://api.webfuze.in/api/v1/task/';
   if (isAdmin === 'true') {
-    uri = 'https://enark.vercel.app/api/v1/admin/getalltasks';
+    uri = 'https://api.webfuze.in/api/v1/admin/getalltasks';
   }
 
   const token = document.cookie.split('=')[1];
@@ -127,7 +127,7 @@ console.log(tasks)
     setConfirmLoading(true);
 
     if (editingTask) {
-      axios.put(`https://enark.vercel.app/api/v1/task/updatetask/${editingTask._id}`, values, {
+      axios.put(url+`/task/updatetask/${editingTask._id}`, values, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -142,7 +142,7 @@ console.log(tasks)
           setConfirmLoading(false);
         });
     } else {
-      axios.post('https://enark.vercel.app/api/v1/task/addtask', values, {
+      axios.post(url+'/task/addtask', values, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -165,7 +165,7 @@ console.log(tasks)
 
   const deleteTask = (taskId) => {
     const token = document.cookie.split('=')[1];
-    axios.delete(`https://enark.vercel.app/api/v1/task/deletetask/${taskId}`, {
+    axios.delete(url+`/task/deletetask/${taskId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
